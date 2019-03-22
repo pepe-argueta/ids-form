@@ -1,0 +1,111 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../ids-input/ids-input.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../paper-behaviors/paper-button-behavior.html">
+<link rel="import" href="../paper-styles/element-styles/paper-material-styles.html">
+
+<dom-module id="ids-form">
+  <template>
+    <custom-style>
+      <style>
+        :host{
+          --button-color: rgb(50, 115, 212);
+          --button-background-color: rgb(255, 255, 255);
+        }
+        paper-button.save {
+          background-color: var(--button-background-color, rgb(255, 255, 255, 0));
+          color: var(--button-color, rgba(0, 0, 0, 0));
+          border: 3px solid var(--button-color, rgba(0, 0, 0, 0));
+          padding: 7px;
+          font-size: 15px;
+          margin-top: 20px;
+          cursor: pointer;
+          width: 120px;
+        }
+        paper-button.save:hover {
+                background-color: var(--button-color, rgb(255, 255, 255, 0));
+                color: var(--button-background-color, rgba(0, 0, 0, 0));
+            }
+      </style>
+    </custom-style>
+    <h2>[[nameForm]]</h2>
+
+    <form action="" class="">
+
+      <paper-input type="text" label="Contacto" id="nombre_contacto" value="{{nombre_contacto}}" auto-validate
+        error-message="letters only!">
+        <iron-icon icon="account-balance-wallet" slot="prefix"></iron-icon>
+      </paper-input>
+
+      <paper-input type="text" label="Telefono Personal" id="telefono_personal" value="{{telefono_personal}}"
+        auto-validate error-message="letters only!">
+        <iron-icon icon="perm-phone-msg" slot="prefix"></iron-icon>
+      </paper-input>
+
+      <paper-input type="text" label="Telefono Personal" id="telefono_oficina" value="{{telefono_oficina}}"
+        auto-validate error-message="letters only!">
+        <iron-icon icon="perm-phone-msg" slot="prefix"></iron-icon>
+      </paper-input>
+
+      <paper-input type="text" label="Correo Personal" id="correo_personal" value="{{correo_personal}}" auto-validate
+        error-message="letters only!">
+        <iron-icon icon="mail" slot="prefix"></iron-icon>
+      </paper-input>
+
+      <paper-input type="text" label="Correo Oficina" id="correo_oficina" value="{{correo_oficina}}" auto-validate
+        error-message="letters only!">
+        <iron-icon icon="mail" slot="prefix"></iron-icon>
+      </paper-input>
+
+      <paper-input type="date" label="Correo Oficina" id="fecha_nacimiento" value="{{fecha_nacimiento}}" auto-validate
+        error-message="letters only!">
+        <iron-icon icon="perm-contact-calendar" slot="prefix"></iron-icon>
+      </paper-input>
+
+      <paper-button raised class="save">raised</paper-button>
+
+    </form>
+
+
+
+    <ul>
+      <li><span>Contacto : </span><b>[[nombre_contacto]]</b></li>
+      <li><span>Telefono Personal : </span><b>[[telefono_personal]]</b></li>
+      <li><span>Telefono Oficina : </span><b>[[telefono_oficina]]</b></li>
+      <li><span>Correo Personal : </span><b>[[correo_personal]]</b></li>
+      <li><span>Correo Oficina : </span><b>[[correo_oficina]]</b></li>
+      <li><span>Fecha Nacimiento : </span><b>[[fecha_nacimiento]]</b></li>
+    </ul>
+
+  </template>
+
+  <script>
+    /**
+     * `ids-form`
+     * 
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class IdsForm extends Polymer.Element {
+      static get is() {
+        return 'ids-form';
+      }
+      static get properties() {
+        return {
+          nameForm: {
+            type: String,
+            value: 'Nuevo Contacto'
+          },
+          nombre_contacto: {
+            type: String,
+          }
+        };
+      }
+    }
+
+    window.customElements.define(IdsForm.is, IdsForm);
+  </script>
+</dom-module>

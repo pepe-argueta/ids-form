@@ -9,64 +9,115 @@
   <template>
     <custom-style>
       <style>
-        :host{
+        :host {
           --button-color: rgb(50, 115, 212);
           --button-background-color: rgb(255, 255, 255);
         }
+
+        paper-input {
+          margin-bottom: 20px;
+          margin-right: 20px;
+        }
+
         paper-button.save {
           background-color: var(--button-background-color, rgb(255, 255, 255, 0));
           color: var(--button-color, rgba(0, 0, 0, 0));
           border: 3px solid var(--button-color, rgba(0, 0, 0, 0));
           padding: 7px;
           font-size: 15px;
-          margin-top: 20px;
           cursor: pointer;
           width: 120px;
+          margin-top: 15px;
         }
+
+        .self-center {
+          height: 80px;
+        }
+
         paper-button.save:hover {
-                background-color: var(--button-color, rgb(255, 255, 255, 0));
-                color: var(--button-background-color, rgba(0, 0, 0, 0));
-            }
+          background-color: var(--button-color, rgb(255, 255, 255, 0));
+          color: var(--button-background-color, rgba(0, 0, 0, 0));
+        }
+
+        .flex-horizontal-with-ratios {
+          @apply --layout-horizontal;
+        }
+
+        .flexchild {
+          @apply --layout-flex-6;
+        }
+
+        .flex-end-justified {
+          @apply --layout-horizontal;
+          @apply --layout-end-justified;
+        }
       </style>
     </custom-style>
     <h2>[[nameForm]]</h2>
 
+
     <form action="" class="">
 
-      <paper-input type="text" label="Contacto" id="nombre_contacto" value="{{nombre_contacto}}" auto-validate
-        error-message="letters only!">
-        <iron-icon icon="account-balance-wallet" slot="prefix"></iron-icon>
-      </paper-input>
+      <div class="container flex-horizontal-with-ratios">
 
-      <paper-input type="text" label="Telefono Personal" id="telefono_personal" value="{{telefono_personal}}"
-        auto-validate error-message="letters only!">
-        <iron-icon icon="perm-phone-msg" slot="prefix"></iron-icon>
-      </paper-input>
+        <div class="flexchild">
+          <paper-input type="text" label="Contacto" id="nombre_contacto" value="{{nombre_contacto}}" auto-validate
+            error-message="Este campo esta vacio!" required>
+            <iron-icon icon="account-balance-wallet" slot="prefix"></iron-icon>
+          </paper-input>
+        </div>
 
-      <paper-input type="text" label="Telefono Personal" id="telefono_oficina" value="{{telefono_oficina}}"
-        auto-validate error-message="letters only!">
-        <iron-icon icon="perm-phone-msg" slot="prefix"></iron-icon>
-      </paper-input>
+      </div>
 
-      <paper-input type="text" label="Correo Personal" id="correo_personal" value="{{correo_personal}}" auto-validate
-        error-message="letters only!">
-        <iron-icon icon="mail" slot="prefix"></iron-icon>
-      </paper-input>
+      <div class="container flex-horizontal-with-ratios">
 
-      <paper-input type="text" label="Correo Oficina" id="correo_oficina" value="{{correo_oficina}}" auto-validate
-        error-message="letters only!">
-        <iron-icon icon="mail" slot="prefix"></iron-icon>
-      </paper-input>
+        <div class="flexchild">
+          <paper-input type="number" label="Telefono Personal" id="telefono_personal" value="{{telefono_personal}}"
+            auto-validate allowed-pattern="[0-9]*" error-message="El campo esta vacio!" required>
+            <iron-icon icon="perm-phone-msg" slot="prefix"></iron-icon>
+          </paper-input>
+        </div>
 
-      <paper-input type="date" label="Correo Oficina" id="fecha_nacimiento" value="{{fecha_nacimiento}}" auto-validate
-        error-message="letters only!">
-        <iron-icon icon="perm-contact-calendar" slot="prefix"></iron-icon>
-      </paper-input>
+        <div class="flexchild">
+          <paper-input type="number" label="Telefono Personal" id="telefono_oficina" value="{{telefono_oficina}}"
+            auto-validate allowed-pattern="[0-9]*" error-message="El campo esta vacio!" required>
+            <iron-icon icon="perm-phone-msg" slot="prefix"></iron-icon>
+          </paper-input>
+        </div>
 
-      <paper-button raised class="save">raised</paper-button>
+      </div>
+
+      <div class="container flex-horizontal-with-ratios">
+        <div class="flexchild">
+          <paper-input type="text" label="Correo Personal" id="correo_personal" value="{{correo_personal}}"
+            auto-validate error-message="Este campo esta vacio!" required>
+            <iron-icon icon="mail" slot="prefix"></iron-icon>
+          </paper-input>
+        </div>
+
+        <div class="flexchild">
+          <paper-input type="text" label="Correo Oficina" id="correo_oficina" value="{{correo_oficina}}" auto-validate
+            error-message="Este campo esta vacio!" required>
+            <iron-icon icon="mail" slot="prefix"></iron-icon>
+          </paper-input>
+        </div>
+      </div>
+
+      <div class="container flex-end-justified">
+        <div class="flexchild">
+          <paper-input type="date" label="Correo Oficina" id="fecha_nacimiento" value="{{fecha_nacimiento}}"
+            auto-validate error-message="Este campo esta vacio!" required>
+            <iron-icon icon="perm-contact-calendar" slot="prefix"></iron-icon>
+          </paper-input>
+        </div>
+      </div>
+      <div class="container self-center">
+        <div class="flexchild">
+          <paper-button class="save" on-click="submit">Guardar</paper-button>
+        </div>
+      </div>
 
     </form>
-
 
 
     <ul>
@@ -77,6 +128,7 @@
       <li><span>Correo Oficina : </span><b>[[correo_oficina]]</b></li>
       <li><span>Fecha Nacimiento : </span><b>[[fecha_nacimiento]]</b></li>
     </ul>
+
 
   </template>
 
@@ -101,8 +153,31 @@
           },
           nombre_contacto: {
             type: String,
+          },
+          telefono_personal: {
+            type: String,
+          },
+          telefono_oficina: {
+            type: String,
+          },
+          correo_personal: {
+            type: String,
+          },
+          correo_oficina: {
+            type: String,
+          },
+          fecha_nacimiento: {
+            type: String,
           }
         };
+      }
+
+      constructor() {
+        super();
+      }
+
+      submit() {
+       
       }
     }
 

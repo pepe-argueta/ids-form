@@ -1,134 +1,28 @@
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../iron-form/iron-form.html">
 <link rel="import" href="../paper-input/paper-input.html">
-<link rel="import" href="../ids-input/ids-input.html">
-<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../paper-behaviors/paper-button-behavior.html">
-<link rel="import" href="../paper-styles/element-styles/paper-material-styles.html">
+<link rel="import" href="../paper-button/paper-button.html">
 
 <dom-module id="ids-form">
   <template>
-    <custom-style>
-      <style>
-        :host {
-          --button-color: rgb(50, 115, 212);
-          --button-background-color: rgb(255, 255, 255);
-        }
+    <slot name="header"></slot>
 
-        paper-input {
-          margin-bottom: 20px;
-          margin-right: 20px;
-        }
-
-        paper-button.save {
-          background-color: var(--button-background-color, rgb(255, 255, 255, 0));
-          color: var(--button-color, rgba(0, 0, 0, 0));
-          border: 3px solid var(--button-color, rgba(0, 0, 0, 0));
-          padding: 7px;
-          font-size: 15px;
-          cursor: pointer;
-          width: 120px;
-          margin-top: 15px;
-        }
-
-        .self-center {
-          height: 80px;
-        }
-
-        paper-button.save:hover {
-          background-color: var(--button-color, rgb(255, 255, 255, 0));
-          color: var(--button-background-color, rgba(0, 0, 0, 0));
-        }
-
-        .flex-horizontal-with-ratios {
-          @apply --layout-horizontal;
-        }
-
-        .flexchild {
-          @apply --layout-flex-6;
-        }
-
-        .flex-end-justified {
-          @apply --layout-horizontal;
-          @apply --layout-end-justified;
-        }
-      </style>
-    </custom-style>
-    <h2>[[nameForm]]</h2>
-
-
-    <form action="" class="">
-
-      <div class="container flex-horizontal-with-ratios">
-
-        <div class="flexchild">
-          <paper-input type="text" label="Contacto" id="nombre_contacto" value="{{nombre_contacto}}" auto-validate
-            error-message="Este campo esta vacio!" required>
-            <iron-icon icon="account-balance-wallet" slot="prefix"></iron-icon>
-          </paper-input>
-        </div>
-
-      </div>
-
-      <div class="container flex-horizontal-with-ratios">
-
-        <div class="flexchild">
-          <paper-input type="number" label="Telefono Personal" id="telefono_personal" value="{{telefono_personal}}"
-            auto-validate allowed-pattern="[0-9]*" error-message="El campo esta vacio!" required>
-            <iron-icon icon="perm-phone-msg" slot="prefix"></iron-icon>
-          </paper-input>
-        </div>
-
-        <div class="flexchild">
-          <paper-input type="number" label="Telefono Personal" id="telefono_oficina" value="{{telefono_oficina}}"
-            auto-validate allowed-pattern="[0-9]*" error-message="El campo esta vacio!" required>
-            <iron-icon icon="perm-phone-msg" slot="prefix"></iron-icon>
-          </paper-input>
-        </div>
-
-      </div>
-
-      <div class="container flex-horizontal-with-ratios">
-        <div class="flexchild">
-          <paper-input type="text" label="Correo Personal" id="correo_personal" value="{{correo_personal}}"
-            auto-validate error-message="Este campo esta vacio!" required>
-            <iron-icon icon="mail" slot="prefix"></iron-icon>
-          </paper-input>
-        </div>
-
-        <div class="flexchild">
-          <paper-input type="text" label="Correo Oficina" id="correo_oficina" value="{{correo_oficina}}" auto-validate
-            error-message="Este campo esta vacio!" required>
-            <iron-icon icon="mail" slot="prefix"></iron-icon>
-          </paper-input>
-        </div>
-      </div>
-
-      <div class="container flex-end-justified">
-        <div class="flexchild">
-          <paper-input type="date" label="Correo Oficina" id="fecha_nacimiento" value="{{fecha_nacimiento}}"
-            auto-validate error-message="Este campo esta vacio!" required>
-            <iron-icon icon="perm-contact-calendar" slot="prefix"></iron-icon>
-          </paper-input>
-        </div>
-      </div>
-      <div class="container self-center">
-        <div class="flexchild">
-          <paper-button class="save" on-click="submit">Guardar</paper-button>
-        </div>
-      </div>
-
-    </form>
-
-
-    <ul>
-      <li><span>Contacto : </span><b>[[nombre_contacto]]</b></li>
-      <li><span>Telefono Personal : </span><b>[[telefono_personal]]</b></li>
-      <li><span>Telefono Oficina : </span><b>[[telefono_oficina]]</b></li>
-      <li><span>Correo Personal : </span><b>[[correo_personal]]</b></li>
-      <li><span>Correo Oficina : </span><b>[[correo_oficina]]</b></li>
-      <li><span>Fecha Nacimiento : </span><b>[[fecha_nacimiento]]</b></li>
-    </ul>
-
+    <iron-form id="ironForm" 
+      on-iron-form-response="responseHandler" 
+      on-iron-form-submit="submitHandler">
+      <form action="[[action]]" method="[[method]]" enctype="[[enctype]]">
+        <template is="dom-repeat" items="[[fields]]" as="itemActual">
+          <paper-input always-float-label label="[[itemActual.label]]" required="[[itemActual.required]]"
+            type="[[itemActual.type]]" auto-validate="[[itemActual.autoValidate]]" name=[[itemActual.name]]
+            pattern="[[itemActual.pattern]]" value={{itemActual.value}} placeholder="[[placeholder]]"></paper-input>
+        </template>
+        <paper-button raised on-click="sendHandler">Guardar</paper-button>
+        <paper-button raised on-click="cancelHandler">Cancelar</paper-button>
+      </form>
+      <br>
+      <div class="output"></div>
+    </iron-form>
 
   </template>
 
@@ -147,28 +41,13 @@
       }
       static get properties() {
         return {
-          nameForm: {
-            type: String,
-            value: 'Nuevo Contacto'
+          action: String,
+          method: String,
+          enctype: String,
+          fields: {
+            type: Array,
+            value: () => [],
           },
-          nombre_contacto: {
-            type: String,
-          },
-          telefono_personal: {
-            type: String,
-          },
-          telefono_oficina: {
-            type: String,
-          },
-          correo_personal: {
-            type: String,
-          },
-          correo_oficina: {
-            type: String,
-          },
-          fecha_nacimiento: {
-            type: String,
-          }
         };
       }
 
@@ -176,9 +55,35 @@
         super();
       }
 
-      submit() {
-       
+      sendHandler(e) {
+        this.$.ironForm.submit();
       }
+
+      cancelHandler(e) {
+        this.$.ironForm.reset();
+      }
+
+      submitHandler (e) {
+        const serializedData = e.detail;
+        const newCustomEvent = new CustomEvent('ids-form-submit', {
+          detail: serializedData,
+          bubbles: true,
+          composed: true
+        });
+        this.dispatchEvent(newCustomEvent);
+      }
+
+      responseHandler(e) {
+        const ironRequestInstance = e.detail;
+        const newCustomEvent = new CustomEvent('ids-form-response', { 
+          detail: ironRequestInstance,
+          bubbles: true,
+          composed: true
+        });
+        this.dispatchEvent(newCustomEvent);
+        
+      }
+
     }
 
     window.customElements.define(IdsForm.is, IdsForm);

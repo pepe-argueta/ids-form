@@ -1,30 +1,96 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>ids-form demo</title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <title>ids-form demo</title>
 
-    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-    <link rel="import" href="../ids-form.html">
-    
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
 
-    <custom-style>
-      <style is="custom-style" include="demo-pages-shared-styles">
-      </style>
-    </custom-style>
-  </head>
-  <body>
-    <div class="vertical-section-container centered">
-      <demo-snippet>
-        <template>
-          <ids-form></ids-form>
-        </template>
-      </demo-snippet>
-    </div>
-  </body>
+  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+  <link rel="import" href="../../polymer/lib/elements/dom-bind.html">
+  <link rel="import" href="../ids-form.html">
+
+
+  <custom-style>
+    <style is="custom-style" include="demo-pages-shared-styles">
+    </style>
+  </custom-style>
+</head>
+
+<body>
+  <div class="vertical-section-container centered">
+    <dom-bind>
+      <template>
+        <ids-form on-ids-form-response="responseHandler" action="[[action]]" enctype="[[enctype]]" method="[[method]]"
+          fields="[[fields]]">
+          <h1 slot="header">Datos de contacto</h1>
+        </ids-form>
+      </template>
+    </dom-bind>
+    <script>
+      const autoBind = document.querySelector('dom-bind');
+      autoBind.action = 'https://agenda-digital-ids.herokuapp.com/api/contactos';
+      autoBind.enctype = 'application/json';
+      autoBind.method = 'POST';
+
+      autoBind.responseHandler = (e) => {
+        const ironRequestInst = e.detail;
+        if (ironRequestInst.status === 200) {
+          alert('El contacto se guardo correctamente');
+        }
+      };
+
+      //Fields
+      autoBind.fields = [{
+          label: 'Contacto',
+          name: 'nombre_contacto',
+          required: true,
+          autoValidate: true,
+          pattern: '^[a-zA-Z\\s]{10,}$',
+          value: ''
+        },
+        {
+          label: 'Telefono Personal',
+          name: 'telefono_personal',
+          required: true,
+          value: ''
+        },
+        {
+          label: 'Telefono Oficina',
+          name: 'telefono_oficina',
+          required: true,
+          value: ''
+        },
+        {
+          label: 'Correo Personal',
+          name: 'correo_personal',
+          required: true,
+          autoValidate: true,
+          pattern: '^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$',
+          value: ''
+        },
+        {
+          label: 'Correo Oficina',
+          name: 'correo_oficina',
+          required: true,
+          autoValidate: true,
+          pattern: '^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$',
+          value: ''
+        },
+        {
+          label: 'Fecha de Nacimiento',
+          name: 'fecha_nacimiento',
+          required: true,
+          value: '',
+          type: 'date'
+        }
+      ];
+    </script>
+  </div>
+</body>
+
 </html>
